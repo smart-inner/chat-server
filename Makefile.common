@@ -1,0 +1,31 @@
+PROJECT=chat-server
+GOPATH ?= $(shell go env GOPATH)
+
+# Get system info, include OS and ARCH
+OS ?= $(shell uname -s)
+ifeq ($(OS), Darwin)
+    OS := osx
+else ifeq ($(OS), darwin)
+    OS := osx
+else ifeq ($(OS), Linux)
+    OS := linux
+endif
+
+ARCH ?= $(shell uname -m)
+ifeq ($(ARCH), arm64)
+    ARCH := x86_64
+else ifeq ($(ARCH), amd64)
+    ARCH := x86_64
+else ifeq ($(ARCH), aarch64)
+    ARCH := aarch_64
+endif
+
+# Ensure GOPATH is set before running build process.
+ifeq "$(GOPATH)" ""
+  $(error Please set the environment variable GOPATH before running `make`)
+endif
+
+CURDIR := $(shell pwd)
+
+GO              := GO111MODULE=on go
+GOBUILD         := $(GO) build $(BUILD_FLAG) -tags codes
